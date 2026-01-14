@@ -1,5 +1,5 @@
-// Configuration API
-const API_BASE_URL = 'http://localhost:3200/api/nzo-notification';
+// Configuration API - chargée depuis config.js
+const API_BASE_URL = window.APP_CONFIG?.apiBaseUrl || 'http://localhost:3200/api/nzo-notification';
 
 // Éléments DOM
 const enableBtn = document.getElementById('enableBtn');
@@ -129,7 +129,11 @@ async function getFCMToken(forceRefresh = false) {
 
     // Obtenir le token
     logDiagnostic('Récupération du token FCM...');
-    const vapidKey = 'BM4IXOo9pDUDL_czsLikVuks1kSYsJ2J6waeyhxwtosI4WutNo08o7Vef3jQBUymM0quCWrh6FUYaAzjlqb0NUE';
+    const vapidKey = window.APP_CONFIG?.vapidKey;
+    
+    if (!vapidKey) {
+      throw new Error('Clé VAPID non configurée. Vérifiez config.js');
+    }
     
     const token = await window.getToken(window.firebaseMessaging, {
       vapidKey: vapidKey,
