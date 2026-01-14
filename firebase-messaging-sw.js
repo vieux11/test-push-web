@@ -1,18 +1,24 @@
-// Configuration Firebase Web (identique à index.html)
+// Configuration Firebase Web - chargée depuis firebase-config-sw.js
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCcIS0KkJFqJhGnKMlOEQAf4lB7F68qfG8",
-  authDomain: "nzo-notification.firebaseapp.com",
-  projectId: "nzo-notification",
-  storageBucket: "nzo-notification.firebasestorage.app",
-  messagingSenderId: "987155403508",
-  appId: "1:987155403508:web:2a2d619395614042f684a1"
-};
+// Charger la configuration Firebase (doit être définie dans firebase-config-sw.js)
+// Si le fichier n'existe pas, une erreur sera levée
+try {
+  importScripts('firebase-config-sw.js');
+} catch (error) {
+  console.error('[firebase-messaging-sw.js] Erreur: firebase-config-sw.js non trouvé!');
+  console.error('[firebase-messaging-sw.js] Copiez firebase-config-sw.example.js vers firebase-config-sw.js');
+  throw new Error('Configuration Firebase manquante pour le Service Worker');
+}
+
+if (typeof FIREBASE_CONFIG_SW === 'undefined') {
+  console.error('[firebase-messaging-sw.js] Erreur: FIREBASE_CONFIG_SW non défini dans firebase-config-sw.js');
+  throw new Error('Configuration Firebase invalide pour le Service Worker');
+}
 
 // Initialiser Firebase dans le Service Worker
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(FIREBASE_CONFIG_SW);
 
 // Récupérer l'instance messaging
 const messaging = firebase.messaging();
