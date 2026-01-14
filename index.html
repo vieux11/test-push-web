@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Push Notifications</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🔔 Test Push Notifications</h1>
+    
+    <!-- Section Autorisation -->
+    <section class="card">
+      <h2>1. Autoriser les notifications</h2>
+      <button id="enableBtn" class="btn btn-primary">Autoriser les notifications</button>
+      <button id="resetBtn" class="btn btn-danger" style="margin-left: 10px;">Reset complet</button>
+      <div id="status" class="status"></div>
+      <div id="tokenDisplay" class="token-display"></div>
+    </section>
+
+    <!-- Section Enregistrement Device -->
+    <section class="card">
+      <h2>2. Enregistrer l'appareil</h2>
+      <form id="deviceForm">
+        <div class="form-group">
+          <label for="userId">User ID (UUID):</label>
+          <input type="text" id="userId" placeholder="ex: a1b2c3d4-e5f6-7890-abcd-ef1234567890" required>
+        </div>
+        <button type="submit" class="btn btn-secondary" id="registerBtn" disabled>Enregistrer l'appareil</button>
+      </form>
+      <div id="deviceStatus" class="status"></div>
+    </section>
+
+    <!-- Section Test Notification -->
+    <section class="card">
+      <h2>3. Envoyer une notification test</h2>
+      <form id="notificationForm">
+        <div class="form-group">
+          <label for="notifUserId">User ID:</label>
+          <input type="text" id="notifUserId" placeholder="ex: a1b2c3d4-e5f6-7890-abcd-ef1234567890" required>
+        </div>
+        <div class="form-group">
+          <label for="title">Titre:</label>
+          <input type="text" id="title" placeholder="ex: Nouveau message" required>
+        </div>
+        <div class="form-group">
+          <label for="body">Message:</label>
+          <textarea id="body" placeholder="ex: Vous avez reçu un nouveau message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Envoyer la notification</button>
+      </form>
+      <div id="notificationStatus" class="status"></div>
+    </section>
+
+    <!-- Section Diagnostic -->
+    <section class="card">
+      <h2>4. Logs de diagnostic</h2>
+      <div id="diagnostic" class="diagnostic-container"></div>
+      <button onclick="document.getElementById('diagnostic').innerHTML = ''" class="btn btn-secondary" style="margin-top: 10px;">Effacer les logs</button>
+    </section>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js';
+    
+    // Configuration Firebase Web
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcIS0KkJFqJhGnKMlOEQAf4lB7F68qfG8",
+      authDomain: "nzo-notification.firebaseapp.com",
+      projectId: "nzo-notification",
+      storageBucket: "nzo-notification.firebasestorage.app",
+      messagingSenderId: "987155403508",
+      appId: "1:987155403508:web:2a2d619395614042f684a1"
+    };
+
+    // Initialiser Firebase
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    // Exposer pour app.js
+    window.firebaseMessaging = messaging;
+    window.getToken = getToken;
+    window.onMessage = onMessage;
+  </script>
+  
+  <script src="app.js"></script>
+</body>
+</html>
+
