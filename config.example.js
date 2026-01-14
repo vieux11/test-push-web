@@ -17,5 +17,5 @@ window.APP_CONFIG = {
   vapidKey: "VOTRE_CLE_VAPID_ICI",
   
   // URL de l'API backend
-  apiBaseUrl: "http://localhost:3200/api/nzo-notification"
+  apiBaseUrl: "http://localhost:3000/api/backend"
 };
