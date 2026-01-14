@@ -61,29 +61,37 @@
     </section>
   </div>
 
+  <!-- Configuration (doit être chargée AVANT Firebase) -->
+  <script src="config.js"></script>
+  
   <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
     import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js';
     
-    // Configuration Firebase Web
-    const firebaseConfig = {
-      apiKey: "AIzaSyCcIS0KkJFqJhGnKMlOEQAf4lB7F68qfG8",
-      authDomain: "nzo-notification.firebaseapp.com",
-      projectId: "nzo-notification",
-      storageBucket: "nzo-notification.firebasestorage.app",
-      messagingSenderId: "987155403508",
-      appId: "1:987155403508:web:2a2d619395614042f684a1"
-    };
+    // Vérifier que la configuration est chargée
+    if (!window.APP_CONFIG || !window.APP_CONFIG.firebase) {
+      console.error('❌ Configuration non trouvée! Assurez-vous que config.js existe et contient APP_CONFIG');
+      document.body.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: red;">
+          <h1>⚠️ Erreur de configuration</h1>
+          <p>Le fichier config.js est manquant ou invalide.</p>
+          <p>Copiez config.example.js vers config.js et remplissez vos valeurs.</p>
+        </div>
+      `;
+    } else {
+      // Configuration Firebase Web - chargée depuis config.js
+      const firebaseConfig = window.APP_CONFIG.firebase;
 
-    // Initialiser Firebase
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
+      // Initialiser Firebase
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
 
-    // Exposer pour app.js
-    window.firebaseMessaging = messaging;
-    window.getToken = getToken;
-    window.onMessage = onMessage;
+      // Exposer pour app.js
+      window.firebaseMessaging = messaging;
+      window.getToken = getToken;
+      window.onMessage = onMessage;
+    }
   </script>
   
   <script src="app.js"></script>
